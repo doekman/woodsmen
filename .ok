@@ -1,2 +1,1 @@
-./build.sh 
-./build.sh --no-open
+echo "Welcome to .ok" #really, welcome!

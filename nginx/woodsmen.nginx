@@ -1,0 +1,53 @@
+server {
+	listen 80;
+	listen [::]:80;
+	server_name ~^(?<prefix>.+\.)?(?<domain>woodsmen.nl)$;
+
+	access_log /var/log/nginx/intranet/access.log;
+	error_log /var/log/nginx/intranet/error.log;
+
+	return 301 https://the.$domain$request_uri;
+}
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name woodsmen.nl;
+
+	keepalive_timeout 5;
+	root /home/remotebeheer/intranet/public_html/content; #INTRANET_ROOT
+
+	location = /favicon.ico { 
+		access_log off; 
+		log_not_found off; 
+		try_files $uri $uri/ =404;
+	}
+	location = /robots.txt {
+		try_files $uri $uri/ =404;
+	}
+	location ~* ^/google.+\.html$ {
+		try_files $uri $uri/ =404;
+	}
+	#Configuration for Let's Encrypt's certbot
+	location /.well-known/ {
+		allow all;
+	}
+	location /nginx_status {
+		stub_status on;
+		access_log off;
+		allow 127.0.0.1;
+		deny all;
+	}
+	#location /k/protected {
+	#	internal;
+	#	alias /home/remotebeheer/intranet/public_html/contacc; #INTRANET_ROOT
+	#}
+	#Pass all other URL's through flask
+	location / {
+		include proxy_params;
+		# we don't want nginx trying to do something clever with
+		# redirects, we set the Host: header above already.
+		proxy_redirect off;
+			proxy_pass http://unix:/run/gunicorn_korset/socket:;
+		#include fastcgi_params;
+	}
+}
