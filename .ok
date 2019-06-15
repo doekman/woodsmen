@@ -1,1 +1,3 @@
-echo "Welcome to .ok" #really, welcome!
+./serve.sh
+./serve.sh --no-open
+ 
