@@ -6,6 +6,6 @@ IFS=$'\n\t'
 cd wwwroot
 if [[ ${1:-} != "--no-open" ]]; then
     (sleep 1 && open http://0.0.0.0:8000) &
-    disown
+    disown $!
 fi
 python3 -m http.server
