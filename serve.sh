@@ -3,9 +3,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-cd wwwroot
+PORT=8000
+ADDR=127.0.0.1
+ROOT=./wwwroot/
 if [[ ${1:-} != "--no-open" ]]; then
-    (sleep 1 && open http://0.0.0.0:8000) &
+    (sleep 1 && open http://$ADDR:$PORT) &
     disown $!
 fi
-python3 -m http.server
+python3 -m http.server $PORT --bind $ADDR --directory $ROOT
