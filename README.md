@@ -10,10 +10,10 @@ Installatie
 Op de VPS van Archipunt:
 
 	cd ~/doekman
+	# Gebruik uit Keychain: "archipunt-vps, one-time password"
 	git clone https://doekman@bitbucket.org/doekman/woodsmen.git
 	cd ~/doekman/woodsmen
 	./process_static.sh install-gz
-	# Gebruik uit Keychain: "Bitbucket One-Time password archipunt-vps"
 	su -m - #provide root password
 	nginx/init.sh http #setup NGINX in HTTP modus
 
