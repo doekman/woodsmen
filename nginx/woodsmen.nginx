@@ -6,7 +6,7 @@ server {
 	access_log /var/log/nginx/doekman/woodsmen/access.log;
 	error_log /var/log/nginx/doekman/woodsmen/error.log;
 
-	return 301 http://the.woodsmen$request_uri;
+	return 301 http://the.woodsmen.nl$request_uri;
 }
 server {
 	listen 80 default_server;

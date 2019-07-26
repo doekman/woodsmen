@@ -9,10 +9,11 @@ function diffing {
 }
 
 SCRIPT_PATH="$(dirname "$0")"
+CMD="${1:-}"
 
-if [[ $1 = "http" ]]; then
+if [[ $CMD = "http" ]]; then
 	diffing "$SCRIPT_PATH/woodsmen.nginx" /etc/nginx/sites-available/woodsmen
-elif [[ $1 = "https" || $1 = "ssl" ]]; then
+elif [[ $CMD = "https" || $CMD = "ssl" ]]; then
 	diffing "$SCRIPT_PATH/snippets/ssl-woodsmen.archipunt.nl.conf" /etc/nginx/snippets/ssl-woodsmen.archipunt.nl.conf
 	diffing "$SCRIPT_PATH/woodsmen-ssl.nginx" /etc/nginx/sites-available/woodsmen
 	nginx -t && echo "Nginx configuration is good" || echo "Error in nginx config"

@@ -15,6 +15,8 @@ WWWROOT="$SCRIPT_PATH/../wwwroot"
 
 if [[ $1 = "http" ]]; then
 
+	mkdir -p /var/log/nginx/doekman/woodsmen/
+
 	# install and enable woodsmen
 	cp "$SCRIPT_PATH/woodsmen.nginx" /etc/nginx/sites-available/woodsmen
 	ln -s /etc/nginx/sites-available/woodsmen /etc/nginx/sites-enabled/
@@ -22,6 +24,8 @@ if [[ $1 = "http" ]]; then
 	CONFIG_CHANGE=1
 
 elif [[ $1 = "https" || $1 = "ssl" ]]; then
+
+	mkdir -p /var/log/nginx/doekman/woodsmen/
 
 	# Certificaat regelen
 	certbot certonly --webroot -w "$WWWROOT" -d the.woodsmen.nl -m doekman@icloud.com --agree-tos
