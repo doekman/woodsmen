@@ -2,12 +2,12 @@
 
 function root_check {
 	if [[ $EUID -ne 0 ]]; then
-		>&2 echo "Please run script with 'sudo $(basename $0) $*', exiting..."
+		>&2 echo "Please run script with 'sudo $(basename "$0") $*', exiting..."
 		exit 1
 	fi
 }
 
-root_check
+root_check "$@"
 
 CONFIG_CHANGE=0
 SCRIPT_PATH="$(dirname "$0")"
@@ -16,7 +16,7 @@ WWWROOT="$SCRIPT_PATH/../wwwroot"
 if [[ $1 = "http" ]]; then
 
 	# install and enable woodsmen
-	cp $SCRIPT_PATH/woodsmen.nginx /etc/nginx/sites-available/woodsmen
+	cp "$SCRIPT_PATH/woodsmen.nginx" /etc/nginx/sites-available/woodsmen
 	ln -s /etc/nginx/sites-available/woodsmen /etc/nginx/sites-enabled/
 
 	CONFIG_CHANGE=1
@@ -30,15 +30,16 @@ elif [[ $1 = "https" || $1 = "ssl" ]]; then
 	mkdir -p ~/download/
 	timestamp=$(date  --iso-8601=seconds --utc)
 	timestamp=${timestamp:0:19}
-	zip -r "~/download/etc_letsencrypt_dump_${timestamp}" /etc/letsencrypt
+	zip -r "$HOME/download/etc_letsencrypt_dump_${timestamp}" /etc/letsencrypt
 
 	#install ssl snippets
-	cp $SCRIPT_PATH/snippets/*.conf /etc/nginx/snippets/
+	cp "$SCRIPT_PATH/snippets/*.conf" /etc/nginx/snippets/
 
 	#overwrite nginx site config with ssl version
-	cp $SCRIPT_PATH/woodsmen-ssl.nginx /etc/nginx/sites-available/woodsmen
+	cp "$SCRIPT_PATH/woodsmen-ssl.nginx" /etc/nginx/sites-available/woodsmen
 
-	if [[ -z grep the.woodsmen.nl < /etc/hosts ]]; then
+	if grep the.woodsmen.nl < /etc/hosts
+	then
 		sed $'1 a 127.0.0.1\tthe.woodsmen.nl' /etc/hosts
 	fi
 
@@ -46,7 +47,7 @@ elif [[ $1 = "https" || $1 = "ssl" ]]; then
 
 else
 	echo "Error, no command specified."
-	echo "Usage: ./$(basename $0) (http|https|ssl)"
+	echo "Usage: ./$(basename "$0") (http|https|ssl)"
 fi
 
 if [[ $CONFIG_CHANGE -eq 1 ]]; then

@@ -1,3 +1,5 @@
 ./serve.sh
 ./serve.sh --no-open
- 
+# For use on the VPS
+./process_static.sh install-gz
+./process_static.sh "$@"

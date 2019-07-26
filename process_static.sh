@@ -6,14 +6,14 @@
 
 function abspath { 
     if [[ -d "$1" ]]; then
-        pushd "$1" > /dev/null;
+        pushd "$1" > /dev/null || exit 1;
         pwd;
-        popd > /dev/null;
+        popd > /dev/null  || exit 1;
     else
         if [[ -e $1 ]]; then
-            pushd "$(dirname "$1")" > /dev/null;
+            pushd "$(dirname "$1")" > /dev/null || exit 1;
             echo "$(pwd)/$(basename "$1")";
-            popd > /dev/null;
+            popd > /dev/null  || exit 1;
         else
             echo "$1" does not exist! 1>&2;
             return 127;
@@ -22,12 +22,12 @@ function abspath {
 }
 
 function usage {
-  if [[ $# > 1 ]] ; then
+  if [[ $# -gt 1 ]] ; then
     echo -e ""
     echo -e "$2"
   fi
   echo -e ""
-  echo -e "Usage: ./$(basename $1) command [options]"
+  echo -e "Usage: ./$(basename "$1") command [options]"
   echo -e ""
   echo -e "  commands (pick one):"
   echo -e "    clean              Remove all gz-archive and sha1-fingerprint files"
@@ -49,20 +49,23 @@ function usage {
   exit 1
 }
 
-if [[ $APAWA_ENV == "PRD" ]]; then
+if [[ $(uname) == "Linux" ]]; then
 	#Debian
 	FIND_PREFIX="find"
 	FIND_INFIX="-regextype posix-extended"
-else
+elif [[ $(uname) == "Darwin" ]]; then
 	#OS X
 	FIND_PREFIX="find -E"
 	FIND_INFIX=""
+else
+	echo "Unkown system $(uname)"
+	exit 1
 fi
 
 
 scriptname=$(basename "$0")
 script_dir=$(dirname "$0")
-static_folder=$(abspath $script_dir/wwwroot)
+static_folder=$(abspath "$script_dir/wwwroot")
 
 gz_include_files='^.*[.](html?|js|map|css|eot|ttf|woff2?|svg)$'
 sha1_exclude_files='^.*[.](sha1|gz|DS_Store)$'
@@ -80,7 +83,7 @@ case ${1:-} in
   clean)              clean_gz=1; clean_sha1=1;;
   clean-gz)           clean_gz=1;;
   clean-sha1)                     clean_sha1=1;;
-  *) usage $scriptname;;
+  *) usage "$scriptname";;
 esac
 shift
 
@@ -91,8 +94,8 @@ while (( $# > 0 )) ; do
     -q | --quiet) ((verbose=0));;
     -v | --verbose) ((verbose=2));;
     -dr | --dry-run) ((dryrun=1));;
-    -h | -\? | --help) usage $scriptname;;
-    *) usage $scriptname;;
+    -h | -\? | --help) usage "$scriptname";;
+    *) usage "$scriptname";;
   esac
   shift
 done
@@ -107,7 +110,7 @@ if (( verbose >= 1 )) ; then
 fi
 
 
-cd $static_folder
+cd "$static_folder" || exit 1
 
 if [[ $clean_gz == "1" ]]; then
 	((verbose >= 1 )) && echo "Cleaning *.gz files"
@@ -116,7 +119,7 @@ if [[ $clean_gz == "1" ]]; then
 		org_name=${static_gz_item:0:${#static_gz_item}-3}
 		if [[ $org_name =~  $gz_include_files ]]; then
 			((verbose >= 1 )) && echo "x remove: $static_gz_item ($org_name)"
-			((dryrun == 0 )) && rm -f $static_gz_item
+			((dryrun == 0 )) && rm -f "$static_gz_item"
 		fi
 	done
 fi
@@ -126,7 +129,7 @@ if [[ $clean_sha1 == "1" ]]; then
 	((verbose >= 1 )) && echo "---------------------"
 	for digest_item in $(${FIND_PREFIX} . ${FIND_INFIX} -type f -regex "^.*[.]sha1$"); do
 		((verbose >= 1 )) && echo "x remove: $digest_item (sha1 file)"
-		((dryrun == 0 )) && rm -f $digest_item
+		((dryrun == 0 )) && rm -f "$digest_item"
 	done
 fi
 
@@ -137,10 +140,10 @@ if [[ $install_gz == "1" ]]; then
 		if [[ $static_item -nt $static_item.gz ]]; then
 			if [[ -f $static_item.gz ]]; then
 				((verbose >= 1 )) && echo "x remove: $static_item.gz"
-				((dryrun == 0 )) && rm -f $static_item.gz
+				((dryrun == 0 )) && rm -f "$static_item.gz"
 			fi
 			((verbose >= 1 )) && echo "- create : $static_item.gz"
-			((dryrun == 0 )) && gzip --keep $static_item
+			((dryrun == 0 )) && gzip --keep "$static_item"
 		else
 			((verbose >= 2 )) && echo "= skip  : ${static_item}"
 		fi
@@ -151,11 +154,11 @@ if [[ $install_sha1 == "1" ]]; then
 	((verbose >= 1 )) && echo "Creating *.sha1 for selected static content"
 	((verbose >= 1 )) && echo "-------------------------------------------"
 	for static_item in $(${FIND_PREFIX} . ${FIND_INFIX} -type f -not -regex "$sha1_exclude_files"); do
-		file_path="$(dirname $static_item)"
-		digest_file="$file_path/$(basename $static_item).sha1"
+		file_path="$(dirname "$static_item")"
+		digest_file="$file_path/$(basename "$static_item").sha1"
 		if [[ $static_item -nt $digest_file ]]; then
 			((verbose >= 1 )) && echo "- create : $digest_file"
-			((dryrun == 0 )) && echo -n "$(openssl sha1 $static_item | sed 's/^.*= //')" > $digest_file
+			((dryrun == 0 )) && echo -n "$(openssl sha1 "$static_item" | sed 's/^.*= //')" > "$digest_file"
 		else
 			((verbose >= 2 )) && echo "= skip  : ${static_item}"
 		fi

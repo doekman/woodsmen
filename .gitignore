@@ -1,1 +1,3 @@
 art-work/*.png
+# For nginx' gzip_static
+wwwroot/**/*.gz
