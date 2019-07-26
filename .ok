@@ -3,3 +3,5 @@
 # For use on the VPS
 ./process_static.sh install-gz
 ./process_static.sh "$@"
+# Run as *root*
+nginx -t && nginx -s reload || echo "Error in nginx config"

@@ -28,6 +28,8 @@ elif [[ $1 = "https" || $1 = "ssl" ]]; then
 	mkdir -p /var/log/nginx/doekman/woodsmen/
 
 	# Certificaat regelen
+	certbot certonly --webroot -w "$WWWROOT" -d woodsmen.nl -m doekman@icloud.com --agree-tos
+	certbot certonly --webroot -w "$WWWROOT" -d www.woodsmen.nl -m doekman@icloud.com --agree-tos
 	certbot certonly --webroot -w "$WWWROOT" -d the.woodsmen.nl -m doekman@icloud.com --agree-tos
 
 	# Certificaat spul veilig stellen
