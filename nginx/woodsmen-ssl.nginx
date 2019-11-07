@@ -16,6 +16,17 @@ server {
 	access_log /var/log/nginx/doekman/woodsmen/access.log;
 	error_log /var/log/nginx/doekman/woodsmen/error.log;
 
+	include snippets/ssl-woodsmen.archipunt.nl.conf;
+	include snippets/ssl-params.conf;
+
+	keepalive_timeout 5;
+	root /home/remotebeheer/doekman/woodsmen/wwwroot;
+
+	#Configuration for Let's Encrypt's certbot + security.txt
+	location /.well-known/ {
+		allow all;
+	}
+
 	return 301 https://the.woodsmen.nl$request_uri;
 }
 server {
