@@ -1,0 +1,5 @@
+# https://securitytxt.org
+# Our security address:
+Contact: security+woodsmen@archipunt.nl
+Contact: +31-50-3133636
+Preferred-Languages: nl, en
