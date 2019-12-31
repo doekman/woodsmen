@@ -64,9 +64,6 @@ server {
 	keepalive_timeout 5;
 	root /home/remotebeheer/doekman/woodsmen/wwwroot;
 
-	if ($hostname != the.woodsmen.nl) { 
-		return 301 https://the.woodsmen.nl$request_uri;
-	}
 	location = /favicon.ico { 
 		access_log off; 
 	}
@@ -83,5 +80,6 @@ server {
 	location / {
 		gzip_static on;
 		expires 5m;
+		index index.html;
 	}
 }
