@@ -35,6 +35,8 @@ elif [[ $1 = "https" || $1 = "ssl" ]]; then
 	timestamp=$(date  --iso-8601=seconds --utc)
 	timestamp=${timestamp:0:19}
 	zip -r "$HOME/download/etc_letsencrypt_dump_${timestamp}" /etc/letsencrypt
+	# En dan vanaf je lokale computer (datum aanpassen)
+	#scp remotebeheer@intranet:/home/remotebeheer/download/etc_letsencrypt_dump_2020-01-13T18:10:50.zip .
 
 	#install ssl snippets
 	cp "$SCRIPT_PATH/snippets/*.conf" /etc/nginx/snippets/
@@ -42,9 +44,9 @@ elif [[ $1 = "https" || $1 = "ssl" ]]; then
 	#overwrite nginx site config with ssl version
 	cp "$SCRIPT_PATH/woodsmen-ssl.nginx" /etc/nginx/sites-available/woodsmen
 
-	if grep the.woodsmen.nl < /etc/hosts
+	if ! grep the.woodsmen.nl < /etc/hosts
 	then
-		sed $'1 a 127.0.0.1\tthe.woodsmen.nl' /etc/hosts
+		echo $'\n127.0.0.1\tthe.woodsmen.nl' >> /etc/hosts
 	fi
 
 	CONFIG_CHANGE=1
