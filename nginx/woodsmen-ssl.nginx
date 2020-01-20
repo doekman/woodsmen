@@ -10,7 +10,7 @@ server {
 	root /home/remotebeheer/doekman/woodsmen/wwwroot;
 
 	#Configuration for Let's Encrypt's certbot
-	location /.well-known/acme-challenge {
+	location /.well-known {
 		allow all;
 	}
 
@@ -38,6 +38,9 @@ server {
 
 	root /home/remotebeheer/doekman/woodsmen/wwwroot;
 
+	location /.well-known {
+		allow all;
+	}
 	location /nginx_status {
 		stub_status on;
 		access_log off;
