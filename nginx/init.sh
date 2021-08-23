@@ -34,9 +34,9 @@ elif [[ $1 = "https" || $1 = "ssl" ]]; then
 	mkdir -p ~/download/
 	timestamp=$(date  --iso-8601=seconds --utc)
 	timestamp=${timestamp:0:19}
-	zip -r "$HOME/download/etc_letsencrypt_dump_${timestamp}" /etc/letsencrypt
+	zip -r "$HOME/Downloads/etc_letsencrypt_dump_${timestamp}" /etc/letsencrypt
 	# En dan vanaf je lokale computer (datum aanpassen)
-	#scp remotebeheer@intranet:/home/remotebeheer/download/etc_letsencrypt_dump_2020-01-13T18:10:50.zip .
+	#scp apawa:/home/webby/Downloads/etc_letsencrypt_dump_*.zip .
 
 	#install ssl snippets
 	cp "$SCRIPT_PATH/snippets/*.conf" /etc/nginx/snippets/
