@@ -1,2 +1,13 @@
-# Oude info Installatie, gaat nu via config-man
-echo "https://bitbucket.org/archipunt/cm_apawa"
+sudo ln -s "$(pwd)/snippets/ssl-woodsmen.archipunt.nl.conf" /etc/nginx/snippets/ssl-woodsmen.archipunt.nl.conf
+install: sudo ln -s "$(pwd)/woodsmen-ssl.nginx" /etc/nginx/sites-available/woodsmen
+enable: sudo ln -s /etc/nginx/sites-available/feedback /etc/nginx/sites-enabled/
+check: sudo nginx -t
+reload: sudo sh -c "nginx -t && systemctl ${1:-reload} nginx" # or 'start'
+# Log files
+access: tail -n ${1:-100} /var/log/nginx/aiwa/access.log 
+error: tail -n ${1:-100} /var/log/nginx/aiwa/error.log 
+sudo less +G /var/log/daemon.log # Check system log
+log: sudo journalctl -eu nginx
+# Status
+ports: sudo netstat --numeric-ports --tcp --all --programs
+status: sudo systemctl ${1:-status} nginx
