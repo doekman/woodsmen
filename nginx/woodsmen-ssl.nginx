@@ -14,6 +14,12 @@ server {
 		allow all;
 	}
 
+
+	#Password protected (don't even support http URL's on this path)
+	location /restricted {
+		deny all;
+	}
+
 	location /nginx_status {
 		stub_status on;
 		access_log off;
@@ -73,6 +79,12 @@ server {
 	#Configuration for Let's Encrypt's certbot + security.txt
 	location /.well-known/ {
 		allow all;
+	}
+	#Password protected site
+	location /restricted/ {
+		index README.md index.html;
+    auth_basic           "Restricted area";
+    auth_basic_user_file /home/webby/doekman/woodsmen/nginx/etc/htpasswd;
 	}
 	location /nginx_status {
 		stub_status on;

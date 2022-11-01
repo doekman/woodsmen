@@ -56,3 +56,15 @@ Updaten:
 	cd ~/doekman/woodsmen
 	git pull
 	./process_static.sh clean-install-gz
+
+
+Restricted
+----------
+
+De map `/restricted/` is beschermd door een wachtwoord. Mappen hieronder die met een `_` beginnen worden niet in _git_ gezet.
+
+Voeg een wachtwoord toe:
+
+	# Uitvoeren vanuit de root van dit repository; vervang USER en PASSWORD door de 
+	$ htpasswd -bB ./nginx/etc/htpasswd USERNAME 'THE PASSWORD'
+
