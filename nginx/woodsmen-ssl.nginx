@@ -7,13 +7,12 @@ server {
 	access_log /var/log/nginx/doekman/woodsmen/access.log;
 	error_log /var/log/nginx/doekman/woodsmen/error.log;
 
-	root /home/remotebeheer/doekman/woodsmen/wwwroot;
+	root /home/webby/doekman/woodsmen/wwwroot;
 
 	#Configuration for Let's Encrypt's certbot
 	location /.well-known {
 		allow all;
 	}
-
 
 	#Password protected (don't even support http URL's on this path)
 	location /restricted {
@@ -36,13 +35,15 @@ server {
 	listen [::]:443 ssl http2;
 	server_name www.woodsmen.nl woodsmen.nl;
 
-	access_log /var/log/nginx/doekman/access.log;
-	error_log /var/log/nginx/doekman/error.log;
+	access_log /var/log/nginx/doekman/woodsmen/access.log;
+	error_log /var/log/nginx/doekman/woodsmen/error.log;
 
-	include snippets/ssl-woodsmen.archipunt.nl.conf;
+	ssl_certificate /etc/letsencrypt/live/the.woodsmen.nl/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/the.woodsmen.nl/privkey.pem;
+
 	include snippets/ssl-params.conf;
 
-	root /home/remotebeheer/doekman/woodsmen/wwwroot;
+	root /home/webby/doekman/woodsmen/wwwroot;
 
 	location /.well-known {
 		allow all;
@@ -64,14 +65,16 @@ server {
 	listen [::]:443 ssl http2;
 	server_name the.woodsmen.nl;
 
-	access_log /var/log/nginx/doekman/access.log;
-	error_log /var/log/nginx/doekman/error.log;
+	access_log /var/log/nginx/doekman/woodsmen/access.log;
+	error_log /var/log/nginx/doekman/woodsmen/error.log;
 
-	include snippets/ssl-woodsmen.archipunt.nl.conf;
+	ssl_certificate /etc/letsencrypt/live/the.woodsmen.nl/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/the.woodsmen.nl/privkey.pem;
+
 	include snippets/ssl-params.conf;
 
 	keepalive_timeout 5;
-	root /home/remotebeheer/doekman/woodsmen/wwwroot;
+	root /home/webby/doekman/woodsmen/wwwroot;
 
 	location = /favicon.ico { 
 		access_log off; 
@@ -82,7 +85,7 @@ server {
 	}
 	#Password protected site
 	location /restricted/ {
-    auth_basic           "Restricted area";
+    auth_basic           "Restricted Area";
     auth_basic_user_file /home/webby/doekman/woodsmen/nginx/etc/htpasswd;
 		gzip_static on;
 		expires 5m;

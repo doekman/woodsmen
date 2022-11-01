@@ -1,4 +1,3 @@
-sudo ln -s "$(pwd)/snippets/ssl-woodsmen.archipunt.nl.conf" /etc/nginx/snippets/ssl-woodsmen.archipunt.nl.conf
 install: sudo ln -s "$(pwd)/woodsmen-ssl.nginx" /etc/nginx/sites-available/woodsmen
 enable: sudo ln -s /etc/nginx/sites-available/feedback /etc/nginx/sites-enabled/
 check: sudo nginx -t
