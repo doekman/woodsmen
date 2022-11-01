@@ -82,7 +82,6 @@ server {
 	}
 	#Password protected site
 	location /restricted/ {
-		index README.md index.html;
     auth_basic           "Restricted area";
     auth_basic_user_file /home/webby/doekman/woodsmen/nginx/etc/htpasswd;
 	}
