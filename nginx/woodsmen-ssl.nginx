@@ -84,6 +84,9 @@ server {
 	location /restricted/ {
     auth_basic           "Restricted area";
     auth_basic_user_file /home/webby/doekman/woodsmen/nginx/etc/htpasswd;
+		gzip_static on;
+		expires 5m;
+		index index.html;
 	}
 	location /nginx_status {
 		stub_status on;
