@@ -1,4 +1,2 @@
-art-work/*.png
-# For nginx' gzip_static
-wwwroot/**/*.gz
-wwwroot/restricted/_*
+# MacOS
+.DS_Store
