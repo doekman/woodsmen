@@ -123,3 +123,40 @@ a{text-decoration-thickness:1px!important;text-underline-offset:.1em}:where(.wp-
 @font-face{font-family:"Ysabeau Office";font-style:normal;font-weight:100 900;font-display:fallback;src:url('https://gwij.nl/wp-content/themes/twentytwentyfive/assets/fonts/ysabeau-office/YsabeauOffice-VariableFont_wght.woff2') format('woff2');}
 @font-face{font-family:"Ysabeau Office";font-style:italic;font-weight:100 900;font-display:fallback;src:url('https://gwij.nl/wp-content/themes/twentytwentyfive/assets/fonts/ysabeau-office/YsabeauOffice-Italic-VariableFont_wght.woff2') format('woff2');}
 /*</style>*/
+
+/* Carousel styles */
+.carousel-container {
+  position: relative;
+  max-width: 100%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel img {
+  width: 100%;
+  max-width: 1000px;
+}
+
+button.prev, button.next  {
+  position: absolute;
+  top: 50%;
+  background-color: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  transform: translateY(-50%);
+}
+
+button.prev {
+  left: 0;
+}
+
+button.next {
+  right: 0;
+}
