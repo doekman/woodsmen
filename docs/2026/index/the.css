@@ -166,3 +166,30 @@ button.prev {
 button.next {
   right: 0;
 }
+/* YouTube image click through.
+ * Source - https://stackoverflow.com/a/43806724
+ */
+.img-overlay-wrap {
+  position: relative;
+  display: inline-block; /* <= shrinks container to image size */
+  transition: transform 150ms ease-in-out;
+  width: 100%;
+}
+
+.img-overlay-wrap img { /* <= optional, for responsiveness */
+   display: block;
+   width: 100%;
+   height: auto;
+}
+
+.img-overlay-wrap svg {
+  position: absolute;
+  top: calc(50% - (32px/2));
+  left: calc(50% - (144px /2));
+  color: white;
+  
+}
+
+.img-overlay-wrap:hover svg {
+  color: red;
+}
